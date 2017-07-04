@@ -8,6 +8,9 @@
 DATABASE="$1"
 TABLE="$2"
 FIELDS="$3"
+HEADER="$4"
+SEPARATOR="$5"
+ENDLINE="$6"
 shift; shift; shift
 
 if [ -z "$DATABASE" ]; then
@@ -19,7 +22,7 @@ if [ -z "$TABLE" ]; then
 	echo "Table name missing"
 	exit 1
 fi
-	
+
 if [ -z "$FIELDS" ]; then
 	FIELDS="*"
 fi
