@@ -1,7 +1,7 @@
 #!/bin/bash
 # Export a MySQL database table into CSV format
 #
-# Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline];
+# Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [enclose] [escape] [endline];
 #
 # If fields is omitted '*' is assumed
 # Default separator ';'
@@ -20,25 +20,25 @@ ENDLINE="${11}"
 
 if [ -z "$HOST" ]; then
     echo "Host is mandatory"
-	echo "Usage: mysqltocsv  <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	echo "Usage: mysqltocsv  <host> <user> <pass> <database> <table> [fields] [header] [separator] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$USER" ]; then
     echo "User is mandatory"
-	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$PASS" ]; then
     echo "Password is mandatory"
-	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$DATABASE" ]; then
     echo "Database is mandatory"
-	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [enclose] [escape] [endline]"
 	exit 1
 fi
 
@@ -53,6 +53,10 @@ fi
 
 if [ -z "$SEPARATOR" ]; then
 	SEPARATOR=';'
+fi
+
+if [ -z "$ENDLINE" ]; then
+	ENDLINE='\r\n'
 fi
 
 #Verify mysql variables 'secure_file_priv'
