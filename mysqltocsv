@@ -4,6 +4,7 @@
 # Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline];
 #
 # If fields is omitted '*' is assumed
+# Default separator ';'
 
 HOST="$1"
 USER="$2"
@@ -16,7 +17,6 @@ SEPARATOR="$8"
 ENCLOSE="$9"
 ESCAPE="${10}"
 ENDLINE="${11}"
-shift 11;
 
 if [ -z "$HOST" ]; then
     echo "Host is mandatory"
@@ -55,18 +55,6 @@ if [ -z "$SEPARATOR" ]; then
 	SEPARATOR=';'
 fi
 
-if [ -z "$ENDLINE" ]; then
-	ENDLINE='\r\n'
-fi
-
-if [ -z "$ENCLOSE" ]; then
-	ENCLOSE='"'
-fi
-
-if [ -z "$ESCAPE" ]; then
-	ESCAPE='\\'
-fi
-
 #Verify mysql variables 'secure_file_priv'
 #mysql -e SHOW VARIABLES LIKE "secure_file_priv"
 TMP=`mktemp -p /var/lib/mysql-files -u mysql-csv.XXXXXX`
@@ -83,3 +71,4 @@ cat "$TMP"
 rm "$TMP"
 
 exit 0
+
