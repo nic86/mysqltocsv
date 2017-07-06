@@ -59,7 +59,7 @@ if [ -n "$HEADER" ]; then
     QUERY="(SELECT $HEADER) UNION (${QUERY})"
 fi
 
-mysql --login-path="$CONFIG" "$DATABASE" -e "$QUERY "$@"
+mysql --login-path="$CONFIG" "$DATABASE" -e "$QUERY" "$@"
 
 cat "$TMP"
 sudo rm "$TMP"
