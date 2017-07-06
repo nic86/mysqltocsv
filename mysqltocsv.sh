@@ -1,28 +1,40 @@
 #!/bin/bash
 # Export a MySQL database table into CSV format
 #
-# Usage: mysqltocsv <config> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline];
+# Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline];
 #
 # If fields is omitted '*' is assumed
 
-CONFIG="$1"
-DATABASE="$2"
-TABLE="$3"
-FIELDS="$4"
-HEADER="$5"
-SEPARATOR="$6"
-ENCLOSE="$7"
-ESCAPE="$8"
-ENDLINE="$9"
-shift 9;
+HOST="$1"
+USER="$2"
+PASS="$3"
+DATABASE="$4"
+TABLE="$5"
+FIELDS="$6"
+HEADER="$7"
+SEPARATOR="$8"
+ENCLOSE="$9"
+ESCAPE="$10"
+ENDLINE="$11"
+shift 11;
 
-if [ -z "$CONFIG" ]; then
-	echo "Usage: mysqltocsv <config> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+if [ -z "$HOST" ]; then
+	echo "Usage: mysqltocsv  <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	exit 1
+fi
+
+if [ -z "$USER" ]; then
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	exit 1
+fi
+
+if [ -z "$PASSWORD" ]; then
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$DATABASE" ]; then
-	echo "Usage: mysqltocsv <config> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
+	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
 
@@ -59,9 +71,9 @@ if [ -n "$HEADER" ]; then
     QUERY="(SELECT $HEADER) UNION (${QUERY})"
 fi
 
-mysql --login-path="$CONFIG" "$DATABASE" -e "$QUERY" "$@"
+mysql "-h $HOST -u $USER -p $PASS" "$DATABASE" -e "$QUERY" "$@"
 
 cat "$TMP"
-sudo rm "$TMP"
+rm "$TMP"
 
 exit 0
