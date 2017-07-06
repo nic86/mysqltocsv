@@ -4,7 +4,8 @@ Export data from mysql to csv file
 
 Command Line Use:
 
-user@hostname:~$./mysqltocsv 'dbhost' 'user' 'pass' 'dbname' 'dbtable' 'fields' 'headers' 'separator' 'enclose' 'escape' 'endline'
+user@hostname:~$./mysqltocsv 'dbhost' 'user' 'pass' 'dbname' 'dbtable' 'fields' 'headers' 'separator' 'enclose' 'escape' 'endline' > destinationfile.csv
+
 
 
 
