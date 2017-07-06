@@ -14,26 +14,30 @@ FIELDS="$6"
 HEADER="$7"
 SEPARATOR="$8"
 ENCLOSE="$9"
-ESCAPE="$10"
-ENDLINE="$11"
+ESCAPE="${10}"
+ENDLINE="${11}"
 shift 11;
 
 if [ -z "$HOST" ]; then
+    echo "Host is mandatory"
 	echo "Usage: mysqltocsv  <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$USER" ]; then
+    echo "User is mandatory"
 	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
 
-if [ -z "$PASSWORD" ]; then
+if [ -z "$PASS" ]; then
+    echo "Password is mandatory"
 	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
 
 if [ -z "$DATABASE" ]; then
+    echo "Database is mandatory"
 	echo "Usage: mysqltocsv <host> <user> <pass> <database> <table> [fields] [header] [separator] [endline] [enclose] [escape] [endline]"
 	exit 1
 fi
@@ -44,34 +48,36 @@ if [ -z "$TABLE" ]; then
 fi
 
 if [ -z "$FIELDS" ]; then
-	FIELDS="*"
+	FIELDS='*'
 fi
 
 if [ -z "$SEPARATOR" ]; then
-	SEPARATOR=";"
+	SEPARATOR=';'
 fi
 
 if [ -z "$ENDLINE" ]; then
-	ENDLINE="\r\n"
+	ENDLINE='\r\n'
 fi
 
 if [ -z "$ENCLOSE" ]; then
-	ENCLOSE="\""
+	ENCLOSE='"'
 fi
 
 if [ -z "$ESCAPE" ]; then
-	ESCAPE="\\\\"
+	ESCAPE='\\'
 fi
 
-TMP=`mktemp -p /tmp -u mysql-csv.XXXXXX`
+#Verify mysql variables 'secure_file_priv'
+#mysql -e SHOW VARIABLES LIKE "secure_file_priv"
+TMP=`mktemp -p /var/lib/mysql-files -u mysql-csv.XXXXXX`
 
-QUERY="SELECT $FIELDS INTO OUTFILE '$TMP' FIELDS TERMINATED BY '$SEPARATOR' ENCLOSED BY '$ENCLOSE' ESCAPED BY '$ESCAPE' LINES TERMINATED BY '$ENDLINE' FROM $TABLE"
+QUERY="SELECT $FIELDS FROM $TABLE INTO OUTFILE '$TMP' FIELDS TERMINATED BY '$SEPARATOR' ENCLOSED BY '$ENCLOSE' ESCAPED BY '$ESCAPE' LINES TERMINATED BY '$ENDLINE'"
 
 if [ -n "$HEADER" ]; then
     QUERY="(SELECT $HEADER) UNION (${QUERY})"
 fi
 
-mysql "-h $HOST -u $USER -p $PASS" "$DATABASE" -e "$QUERY" "$@"
+mysql --host="$HOST" --user="$USER" --password="$PASS" --database="$DATABASE" --execute="${QUERY}"
 
 cat "$TMP"
 rm "$TMP"
